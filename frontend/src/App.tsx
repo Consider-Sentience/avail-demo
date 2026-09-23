@@ -109,7 +109,7 @@ function Dropdown({
                 onSelect(opt);
                 setOpen(false);
               }}
-              className="bg-white hover:bg-cloud flex flex-col h-[52px] items-start justify-center px-3 w-full text-left"
+              className="bg-white hover:bg-cloud flex flex-col min-h-[52px] items-start justify-center px-3 py-2 w-full text-left"
             >
               <p className="font-normal text-[16px] text-black" style={wdth}>
                 {opt}
@@ -175,22 +175,59 @@ export default function App() {
   }
 
   return (
-    <div className="bg-ink flex flex-col items-center w-full min-h-screen">
-      {/* Header */}
-      <header className="bg-ink flex flex-col gap-2 items-start justify-center p-4 w-full">
-        <a href="https://considersentience.ai" className="h-8 block">
+    <div className="bg-ink flex flex-col items-center w-full min-h-screen relative">
+      {/* Header — absolutely positioned overlay on top of Hero's own pt-[120px],
+          NOT a normal stacked block (this was the bug causing extra top space) */}
+      <header className="absolute top-0 left-0 right-0 bg-ink flex flex-col gap-[8px] items-start justify-center p-[16px] z-10">
+        <a href="https://considersentience.ai" className="block h-[32px] w-[199px]">
           {/* Replace /logo.svg with the real exported asset — see SETUP.md */}
-          <img src="/logo.svg" alt="Consider Sentience" className="h-8" />
+          <img src="/logo.svg" alt="Consider Sentience" className="h-[32px] w-[199px] object-cover" />
         </a>
-        <a href="https://considersentience.ai" className="group flex gap-[5px] items-center text-center whitespace-nowrap">
-          <span className="font-['Nunito'] font-extralight text-[20px] capitalize text-cloud group-hover:text-rust/70" style={{ lineHeight: 'normal' }}>[</span>
-          <span className="font-normal text-[14px] text-cloud group-hover:text-rust/70" style={wdth}>return to site</span>
-          <span className="font-['Nunito'] font-extralight text-[20px] capitalize text-cloud group-hover:text-rust/70" style={{ lineHeight: 'normal' }}>]</span>
+        <a href="https://considersentience.ai" className="group relative block h-[21px]">
+          {/* Default state — exact port of Figma node 4:202 */}
+          <div
+            className="group-hover:hidden [word-break:break-word] content-stretch flex gap-[5px] items-center justify-center leading-[0] relative text-[#edeef1] text-center w-[127px] whitespace-nowrap"
+          >
+            <div className="capitalize flex flex-col font-['Nunito'] font-extralight justify-center relative shrink-0 text-[20px]">
+              <p className="leading-none">[</p>
+            </div>
+            <div className="flex flex-col font-normal justify-center relative shrink-0 text-[14px]" style={wdth}>
+              <p className="leading-[1.5]">return to site</p>
+            </div>
+            <div className="capitalize flex flex-col font-['Nunito'] font-extralight justify-center relative shrink-0 text-[20px]">
+              <p className="leading-none">]</p>
+            </div>
+          </div>
+
+          {/* Hover state — exact port of Figma node 4:206, no width constraint (matches source) */}
+          <div className="hidden group-hover:flex gap-[5px] items-center justify-center relative absolute top-0 left-0">
+            <div className="flex flex-row items-center self-stretch">
+              <div className="content-stretch flex h-full items-center justify-end relative shrink-0 w-[8px]">
+                <div className="relative shrink-0 size-[4px] rounded-full bg-[rgba(201,124,46,0.7)]" />
+              </div>
+            </div>
+            <div className="[word-break:break-word] capitalize flex flex-col font-['Nunito'] font-light justify-center leading-[0] relative shrink-0 text-[20px] text-[rgba(201,124,46,0.7)] text-center whitespace-nowrap">
+              <p className="leading-none">[</p>
+            </div>
+            <div className="[word-break:break-word] flex flex-col font-['Source_Serif_4'] font-medium italic justify-center leading-[0] relative shrink-0 text-[#edeef1] text-[14px] text-center whitespace-nowrap">
+              <p className="leading-[1.5]">return to site</p>
+            </div>
+            <div className="[word-break:break-word] capitalize flex flex-col font-['Nunito'] font-light justify-center leading-[0] relative shrink-0 text-[20px] text-[rgba(201,124,46,0.7)] text-center whitespace-nowrap">
+              <p className="leading-none">]</p>
+            </div>
+            <div className="flex flex-row items-center self-stretch">
+              <div className="content-stretch flex h-full items-center relative shrink-0">
+                <div className="content-stretch flex h-full items-center relative shrink-0">
+                  <div className="relative shrink-0 size-[6px] rounded-full bg-[rgba(201,124,46,0.7)]" />
+                </div>
+              </div>
+            </div>
+          </div>
         </a>
       </header>
 
-      {/* Hero */}
-      <section className="flex flex-col gap-16 items-center pb-4 pt-20 md:pt-32 px-6 md:px-16 xl:px-64 w-full">
+      {/* Hero — exact per-breakpoint values pulled from Figma nodes 1:229 (desktop), 1:280 (tablet), 1:331 (mobile) */}
+      <section className="flex flex-col gap-[20px] md:gap-[24px] xl:gap-[64px] items-center pb-4 pt-[120px] xl:pt-[160px] px-[44px] md:px-[128px] xl:px-[256px] w-full">
         <div className="flex flex-col gap-4 items-center">
           <div className="flex flex-col gap-1 items-center">
             <div className="flex gap-[2px] items-center justify-center">
@@ -212,16 +249,25 @@ export default function App() {
             <span className="font-['Source_Serif_4'] italic font-medium text-white/70 text-[14px] tracking-[-0.28px]">
               a project from
             </span>
-            <a href="https://considersentience.ai" className="h-5 block">
-              <img src="/logo.svg" alt="Consider Sentience" className="h-5" />
+            <a href="https://considersentience.ai" className="block h-[20px] w-[124px]">
+              <img src="/logo.svg" alt="Consider Sentience" className="h-[20px] w-[124px] object-cover" />
             </a>
             <span className="font-['Nunito'] text-rust text-[20px] tracking-[-0.4px]">]</span>
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 items-start w-full">
-          <div className="flex flex-col gap-3 items-center justify-center text-[32px] md:text-[40px] tracking-[0.4px] uppercase w-full text-center">
-            <div className="flex flex-wrap gap-3 items-center justify-center">
+        <div className="flex flex-col gap-[20px] md:gap-[24px] xl:gap-[32px] items-start w-full">
+          {/* Mobile heading (1:352) — wraps differently from tablet/desktop, not just smaller text */}
+          <div className="flex md:hidden flex-col gap-[6px] items-center justify-center text-[24px] tracking-[0.24px] uppercase w-full text-center">
+            <div className="flex gap-[8px] items-center justify-center whitespace-nowrap">
+              <span className="text-cloud font-normal" style={wdth}>Does AI</span>
+              <span className="text-rust font-medium" style={wdth}>actually</span>
+            </div>
+            <span className="text-cloud font-normal" style={wdth}>cite this organization's work?</span>
+          </div>
+          {/* Tablet (1:301) / Desktop (1:250) heading — same structure, different scale */}
+          <div className="hidden md:flex flex-col gap-[10px] xl:gap-[12px] items-center justify-center text-[32px] xl:text-[40px] tracking-[0.32px] xl:tracking-[0.4px] uppercase w-full text-center whitespace-nowrap">
+            <div className="flex gap-[12px] items-center justify-center">
               <span className="text-cloud font-normal" style={wdth}>Does AI</span>
               <span className="text-rust font-medium" style={wdth}>actually</span>
               <span className="text-cloud font-normal" style={wdth}>cite this</span>
@@ -229,7 +275,10 @@ export default function App() {
             <span className="text-cloud font-normal" style={wdth}>organization's work?</span>
           </div>
           <div className="flex flex-col items-center w-full">
-            <p className="text-cloud text-[20px] text-center tracking-[-0.1px] leading-[1.6] max-w-[768px]" style={wdth}>
+            <p
+              className="text-cloud text-[16px] md:text-[18px] xl:text-[20px] text-center tracking-[-0.08px] md:tracking-[-0.09px] xl:tracking-[-0.1px] leading-[1.6] max-w-[768px]"
+              style={wdth}
+            >
               Millions of people are going straight to LLMs to ask questions about welfare, sentience,
               advocacy, and other topics related to non-human animals. But many of the answers they
               receive do not cite the wealth of information contained in websites, publications, and
@@ -240,7 +289,7 @@ export default function App() {
       </section>
 
       {/* Input panel — results render INSIDE this same panel, appended below the button/note area */}
-      <section className="flex flex-col items-center px-6 md:px-16 xl:px-64 py-8 w-full">
+      <section className="flex flex-col items-center px-[24px] md:px-[94px] xl:px-[256px] py-8 w-full">
         <div className="bg-cloud border border-rust rounded-lg flex flex-col gap-6 items-center overflow-visible p-6 md:p-8 w-full max-w-[766px]">
           <p className="font-medium text-slate text-[16px] text-center tracking-[-0.08px] leading-[1.6]" style={wdth}>
             Pick an animal advocacy organization and a question. We'll ask Claude, Perplexity,
@@ -311,12 +360,14 @@ export default function App() {
             )}
           </div>
 
-          {/* Run button */}
+          {/* Run button — mobile uses the dedicated "AVAIL Primary button - mobile" instance
+              override (px-14/py-10/text-14), confirmed on the actual placed Mobile instance
+              (node 1:362), not just the abstract component definition */}
           <button
             type="button"
             onClick={handleRun}
             disabled={loading || !activeQuestion}
-            className={`rounded-full px-4 py-3 text-[16px] tracking-[0.32px] uppercase transition-colors ${
+            className={`rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] tracking-[0.28px] md:tracking-[0.32px] uppercase transition-colors ${
               loading || !activeQuestion
                 ? 'bg-slate/40 text-white cursor-default'
                 : 'bg-rust text-cloud cursor-pointer hover:bg-[#1b2430]'
@@ -389,14 +440,14 @@ export default function App() {
         </div>
       </section>
 
-      {/* Credibility section */}
-      <section className="flex flex-col gap-4 items-start px-6 md:px-16 xl:px-64 py-8 w-full">
-        <p className="text-[28px] tracking-[0.56px] uppercase text-cloud" style={wdth}>
-          <span className="font-normal">This demo is </span>
-          <span className="text-rust">one query</span>
-          <span className="font-normal">. </span>
-          <span className="font-normal">Our pilot ran</span>
-          <span className="text-rust"> 480</span>
+      {/* Credibility section — exact values from Figma nodes 1:262 (desktop/tablet), 1:363 (mobile) */}
+      <section className="flex flex-col gap-4 items-start px-[24px] md:px-[128px] xl:px-[256px] py-8 w-full">
+        <p className="text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px] uppercase text-cloud" style={wdth}>
+          <span className="font-normal tracking-[0.32px]">This demo is </span>
+          <span className="text-rust tracking-[0.32px]">one query</span>
+          <span className="font-normal tracking-[0.32px]">. </span>
+          <span className="font-normal tracking-[0.32px]">Our pilot ran</span>
+          <span className="text-rust tracking-[0.32px]"> 480</span>
           <span>.</span>
         </p>
         <p className="text-cloud text-[15px] leading-[1.6]" style={wdth}>
@@ -408,15 +459,15 @@ export default function App() {
           href="https://huggingface.co/datasets/considersentience/animal-welfare-veganism-query-corpus"
           target="_blank"
           rel="noreferrer"
-          className="bg-cloud border border-slate rounded-full px-4 py-3 text-[16px] uppercase tracking-[0.32px] text-ink hover:bg-[#4a4e55] hover:text-cloud transition-colors"
+          className="bg-cloud border border-slate rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] uppercase tracking-[0.28px] md:tracking-[0.32px] text-ink hover:bg-[#4a4e55] hover:text-cloud transition-colors"
           style={wdth}
         >
           see the open dataset
         </a>
       </section>
 
-      {/* CTA section */}
-      <section className="flex flex-col items-center px-6 md:px-16 xl:px-64 py-12 w-full">
+      {/* CTA section — px pattern matches credibility section (256/128/24) */}
+      <section className="flex flex-col items-center px-[24px] md:px-[128px] xl:px-[256px] py-12 w-full">
         <div className="bg-rust border border-slate rounded-lg flex flex-col gap-6 items-start p-6 md:p-8 w-full max-w-[768px]">
           <div className="flex flex-col gap-3 text-white w-full">
             <p className="font-medium text-[20px] tracking-[0.4px] uppercase" style={wdth}>
@@ -430,7 +481,7 @@ export default function App() {
           </div>
           <a
             href="https://considersentience.ai"
-            className="bg-cloud border border-slate rounded-full px-4 py-3 text-[16px] uppercase tracking-[0.32px] text-ink hover:bg-[#4a4e55] hover:text-cloud transition-colors"
+            className="bg-cloud border border-slate rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] uppercase tracking-[0.28px] md:tracking-[0.32px] text-ink hover:bg-[#4a4e55] hover:text-cloud transition-colors"
             style={wdth}
           >
             learn more
