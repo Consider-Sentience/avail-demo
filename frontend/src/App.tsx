@@ -245,10 +245,13 @@ function HomePage() {
         <div className="flex flex-col gap-[20px] md:gap-[24px] xl:gap-[32px] items-start w-full">
           {/* One paragraph so every line break gets the same line-height (no per-line gaps) */}
           <h1
-            className="text-[24px] md:text-[32px] xl:text-[40px] tracking-[0.24px] md:tracking-[0.32px] xl:tracking-[0.4px] leading-[1.4] uppercase w-full text-center text-cloud font-normal"
+            className="text-[24px] md:text-[32px] xl:text-[40px] tracking-[0.24px] md:tracking-[0.32px] xl:tracking-[0.4px] leading-[1.4] uppercase w-full text-center text-cloud font-normal md:flex md:flex-col md:items-center"
             style={{ ...wdth, textWrap: 'balance' } as React.CSSProperties}
           >
-            Does AI <span className="text-rust font-medium">actually</span> cite this organization's work?
+            <span className="md:whitespace-nowrap">When people ask AI about animals,</span>{' '}
+            <span className="md:whitespace-nowrap">
+              <span className="text-rust font-medium">who</span> does it <span className="text-rust font-medium">cite</span>?
+            </span>
           </h1>
           <div className="flex flex-col items-center w-full">
             <p
@@ -257,8 +260,8 @@ function HomePage() {
             >
               Millions of people are going straight to LLMs to ask questions about welfare, sentience,
               advocacy, and other topics related to non-human animals. But many of the answers they
-              receive do not cite the wealth of information contained in websites, publications, and
-              other resources from animal advocacy organizations. We want to change that.
+              receive do not cite the wealth of information contained in resources from animal
+              advocacy organizations. We want to change that.
             </p>
           </div>
         </div>
