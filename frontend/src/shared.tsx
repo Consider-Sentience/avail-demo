@@ -167,7 +167,7 @@ export function Segmented<T extends string>({
 }
 
 // Folder-style tabs for switching between views of the same thing (e.g. Report / Manage tracking).
-// Built for the navy page: the active tab is a cloud-gray tab with orange caps that opens into the rust baseline.
+// Built for the navy page: the active tab is a cloud-gray tab with orange caps that opens into the slate baseline.
 export function Tabs<T extends string>({
   value,
   options,
@@ -185,7 +185,7 @@ export function Tabs<T extends string>({
     (e.currentTarget.parentElement?.querySelector(`[data-tab="${next.value}"]`) as HTMLElement | null)?.focus();
   }
   return (
-    <div role="tablist" className="flex items-end gap-1 w-full border-b border-rust">
+    <div role="tablist" className="flex items-end w-full border-b border-slate">
       {options.map((o, i) => {
         const on = value === o.value;
         return (
@@ -198,8 +198,8 @@ export function Tabs<T extends string>({
             tabIndex={on ? 0 : -1}
             onClick={() => onChange(o.value)}
             onKeyDown={(e) => onKey(e, i)}
-            className={`relative -mb-px rounded-t-lg border border-b-0 border-rust px-4 py-3 md:px-6 md:py-[14px] text-[12px] md:text-[14px] tracking-[0.24px] md:tracking-[0.28px] uppercase whitespace-nowrap transition-colors cursor-pointer ${
-              on ? 'bg-cloud text-rust font-medium' : 'bg-transparent text-cloud font-normal hover:bg-cloud/10'
+            className={`relative -mb-px ${i > 0 ? '-ml-px' : ''} rounded-t-lg border border-b-0 border-slate px-4 py-2 md:px-5 md:py-[10px] text-[12px] md:text-[14px] tracking-[0.24px] md:tracking-[0.28px] uppercase whitespace-nowrap transition-colors cursor-pointer ${
+              on ? 'z-10 bg-cloud text-rust font-medium' : 'bg-cloud/5 text-cloud font-normal hover:bg-cloud/10'
             }`}
             style={wdth}
           >
