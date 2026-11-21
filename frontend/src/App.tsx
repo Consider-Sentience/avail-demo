@@ -132,7 +132,7 @@ function CheckForm() {
           <div className="flex flex-col gap-2 items-start w-full">
             <div
               className={`bg-white border border-solid rounded h-[100px] w-full p-4 ${
-                customQuestion ? 'border-[#c97c2e]' : 'border-slate/55'
+                customQuestion ? 'border-rust' : 'border-slate/55'
               }`}
             >
               <textarea
@@ -140,12 +140,12 @@ function CheckForm() {
                 onChange={(e) => setCustomQuestion(e.target.value.slice(0, 280))}
                 placeholder="Ask something about animal welfare, farming, or vegan living..."
                 className={`w-full h-full resize-none border-none outline-none text-[15px] placeholder:text-slate/55 bg-transparent ${
-                  customQuestion ? 'text-[#1b2430]' : ''
+                  customQuestion ? 'text-ink' : ''
                 }`}
                 style={wdth}
               />
             </div>
-            <p className={`text-[12px] self-end ${customQuestion ? 'text-[#1b2430]' : 'text-slate/55'}`} style={wdth}>
+            <p className={`text-[12px] self-end ${customQuestion ? 'text-ink' : 'text-slate/55'}`} style={wdth}>
               {customQuestion.length} / 280
             </p>
           </div>
@@ -163,7 +163,7 @@ function CheckForm() {
       </button>
 
       {error && (
-        <div className="bg-white border border-[#a85c4a]/40 rounded p-4 w-full text-[#a85c4a] text-[14px] text-center">
+        <div className="bg-white border border-status-fail/40 rounded p-4 w-full text-status-fail text-[14px] text-center">
           {error}
         </div>
       )}

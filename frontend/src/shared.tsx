@@ -73,18 +73,18 @@ export function Dropdown({
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={`bg-white border border-solid flex h-[45px] items-center justify-between px-4 py-3 rounded w-full ${
-          open ? 'border-[#c97c2e]' : 'border-[rgba(74,78,85,0.55)]'
+          open ? 'border-rust' : 'border-[rgba(74,78,85,0.55)]'
         }`}
       >
         <p
-          className="flex-1 font-normal text-[#1a1c1e] text-[15px] text-ellipsis text-left overflow-hidden whitespace-nowrap"
+          className="flex-1 font-normal text-ink text-[15px] text-ellipsis text-left overflow-hidden whitespace-nowrap"
           style={wdth}
         >
           {value}
         </p>
         <div className={`shrink-0 size-4 flex items-center justify-center ${open ? '-scale-y-100' : ''}`}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M4 6l4 4 4-4" stroke="#1a1c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 6l4 4 4-4" stroke="#4A4E55" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </button>
@@ -215,11 +215,11 @@ export function Tabs<T extends string>({
 
 export const primaryBtn = (disabled: boolean) =>
   `rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] tracking-[0.28px] md:tracking-[0.32px] uppercase transition-colors ${
-    disabled ? 'bg-slate/40 text-white cursor-default' : 'bg-rust text-cloud cursor-pointer hover:bg-[#1b2430]'
+    disabled ? 'bg-slate/40 text-white cursor-default' : 'bg-rust text-cloud cursor-pointer hover:bg-ink'
   }`;
 
 export const secondaryBtn =
-  'whitespace-nowrap bg-cloud border border-slate rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] uppercase tracking-[0.28px] md:tracking-[0.32px] text-ink hover:bg-[#4a4e55] hover:text-cloud transition-colors cursor-pointer';
+  'whitespace-nowrap bg-cloud border border-slate rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] uppercase tracking-[0.28px] md:tracking-[0.32px] text-ink hover:bg-slate hover:text-cloud transition-colors cursor-pointer';
 
 // Small pill button (same scale as the secondary toggle) for in-form actions like "upload csv"
 export const smallBtn =
@@ -242,7 +242,7 @@ export function SiteHeader() {
         <img src="/logo.svg" alt="Consider Sentience" className="h-[32px] w-[199px] object-cover" />
       </a>
       <a href="https://considersentience.ai" className="group relative block h-[21px]">
-        <div className="group-hover:hidden [word-break:break-word] content-stretch flex gap-[5px] items-center justify-center leading-[0] relative text-[#edeef1] text-center w-[127px] whitespace-nowrap">
+        <div className="group-hover:hidden [word-break:break-word] content-stretch flex gap-[5px] items-center justify-center leading-[0] relative text-cloud text-center w-[127px] whitespace-nowrap">
           <div className="capitalize flex flex-col font-['Nunito'] font-extralight justify-center relative shrink-0 text-[20px]">
             <p className="leading-none">[</p>
           </div>
@@ -262,7 +262,7 @@ export function SiteHeader() {
           <div className="[word-break:break-word] capitalize flex flex-col font-['Nunito'] font-light justify-center leading-[0] relative shrink-0 text-[20px] text-[rgba(201,124,46,0.7)] text-center whitespace-nowrap">
             <p className="leading-none">[</p>
           </div>
-          <div className="[word-break:break-word] flex flex-col font-['Source_Serif_4'] font-medium italic justify-center leading-[0] relative shrink-0 text-[#edeef1] text-[14px] text-center whitespace-nowrap">
+          <div className="[word-break:break-word] flex flex-col font-['Source_Serif_4'] font-medium italic justify-center leading-[0] relative shrink-0 text-cloud text-[14px] text-center whitespace-nowrap">
             <p className="leading-[1.5]">return to site</p>
           </div>
           <div className="[word-break:break-word] capitalize flex flex-col font-['Nunito'] font-light justify-center leading-[0] relative shrink-0 text-[20px] text-[rgba(201,124,46,0.7)] text-center whitespace-nowrap">

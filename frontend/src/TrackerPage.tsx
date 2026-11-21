@@ -436,7 +436,7 @@ export default function TrackerPage({ token }: { token: string }) {
                   </button>
                   <button
                     type="button"
-                    className={confirmDelete ? `${smallBtn} !bg-[#a85c4a] !border-[#a85c4a] !text-white` : smallBtn}
+                    className={confirmDelete ? `${smallBtn} !bg-status-fail !border-status-fail !text-white` : smallBtn}
                     style={wdth}
                     onClick={confirmDelete ? del : () => setConfirmDelete(true)}
                   >
@@ -450,7 +450,7 @@ export default function TrackerPage({ token }: { token: string }) {
                     {confirmDelete ? 'confirm delete (can’t be undone)' : 'delete tracker'}
                   </button>
                 </div>
-                {error && <p className="text-[#e0846f] text-[13px]" style={wdth}>{error}</p>}
+                {error && <p className="text-status-fail text-[13px]" style={wdth}>{error}</p>}
               </div>
             )}
           </div>

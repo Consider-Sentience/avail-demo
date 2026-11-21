@@ -10,6 +10,8 @@ export default {
         cloud: colors.cloud,
         slate: colors.slate,
         rust: colors.rust,
+        'status-fail': colors['status-fail'],
+        'status-pass': colors['status-pass'],
       },
       fontFamily: {
         ...fontFamily,
