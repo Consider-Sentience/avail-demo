@@ -163,7 +163,7 @@ function CheckForm() {
       </button>
 
       {error && (
-        <div className="bg-white border border-status-fail/40 rounded p-4 w-full text-status-fail text-[14px] text-center">
+        <div className="bg-status-fail-tint border border-status-fail/40 rounded p-4 w-full text-status-fail text-[14px] text-center">
           {error}
         </div>
       )}
