@@ -69,7 +69,7 @@ export default function QuestionsField({
   return (
     <div className="flex flex-col gap-3 items-start w-full">
       <FieldLabel>Questions</FieldLabel>
-      <div className={`bg-white border border-solid rounded w-full p-4 ${text ? 'border-[#c97c2e]' : 'border-slate/55'}`}>
+      <div className={`bg-white border border-solid rounded w-full p-4 ${text ? 'border-rust' : 'border-slate/55'}`}>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -86,7 +86,7 @@ export default function QuestionsField({
           upload csv
         </button>
         <input ref={fileRef} type="file" accept=".csv,text/csv" className="hidden" onChange={onFile} />
-        <p className={`text-[12px] ${count > MAX_QUESTIONS ? 'text-[#e0846f] font-medium' : note}`} style={wdth}>
+        <p className={`text-[12px] ${count > MAX_QUESTIONS ? 'text-status-fail font-medium' : note}`} style={wdth}>
           {count} / {MAX_QUESTIONS}
         </p>
       </div>
