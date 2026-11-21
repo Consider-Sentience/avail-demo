@@ -415,7 +415,7 @@ export default function TrackerPage({ token }: { token: string }) {
                   <p className="text-cloud/70 text-[12px] leading-[1.6]" style={wdth}>
                     Adding new questions starts a fresh check of your whole list. Removed questions stay in past runs.
                   </p>
-                  {notice && <p className="text-cloud text-[14px]" style={wdth}>{notice}</p>}
+                  {notice && <p className="bg-sage-tint border border-status-pass/40 rounded p-3 text-ink text-[14px]" style={wdth}>{notice}</p>}
                 </div>
 
                 <div className="flex flex-wrap gap-3">
@@ -450,7 +450,7 @@ export default function TrackerPage({ token }: { token: string }) {
                     {confirmDelete ? 'confirm delete (can’t be undone)' : 'delete tracker'}
                   </button>
                 </div>
-                {error && <p className="text-status-fail text-[13px]" style={wdth}>{error}</p>}
+                {error && <p className="bg-status-fail-tint border border-status-fail/40 rounded p-3 text-status-fail text-[13px]" style={wdth}>{error}</p>}
               </div>
             )}
           </div>

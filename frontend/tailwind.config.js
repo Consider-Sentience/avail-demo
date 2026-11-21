@@ -12,6 +12,8 @@ export default {
         rust: colors.rust,
         'status-fail': colors['status-fail'],
         'status-pass': colors['status-pass'],
+        'status-fail-tint': colors['status-fail-tint'],
+        'sage-tint': colors['sage-tint'],
       },
       fontFamily: {
         ...fontFamily,
