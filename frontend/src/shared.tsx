@@ -166,6 +166,51 @@ export function Segmented<T extends string>({
   );
 }
 
+// Folder-style tabs for switching between views of the same thing (e.g. Report / Manage tracking).
+// Built for the navy page: the active tab is a cloud-gray tab with orange caps that opens into the rust baseline.
+export function Tabs<T extends string>({
+  value,
+  options,
+  onChange,
+}: {
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+}) {
+  function onKey(e: React.KeyboardEvent, i: number) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const next = options[(i + (e.key === 'ArrowRight' ? 1 : options.length - 1)) % options.length];
+    onChange(next.value);
+    (e.currentTarget.parentElement?.querySelector(`[data-tab="${next.value}"]`) as HTMLElement | null)?.focus();
+  }
+  return (
+    <div role="tablist" className="flex items-end gap-1 w-full border-b border-rust">
+      {options.map((o, i) => {
+        const on = value === o.value;
+        return (
+          <button
+            key={o.value}
+            type="button"
+            role="tab"
+            data-tab={o.value}
+            aria-selected={on}
+            tabIndex={on ? 0 : -1}
+            onClick={() => onChange(o.value)}
+            onKeyDown={(e) => onKey(e, i)}
+            className={`relative -mb-px rounded-t-lg border border-b-0 border-rust px-4 py-3 md:px-6 md:py-[14px] text-[12px] md:text-[14px] tracking-[0.24px] md:tracking-[0.28px] uppercase whitespace-nowrap transition-colors cursor-pointer ${
+              on ? 'bg-cloud text-rust font-medium' : 'bg-transparent text-cloud font-normal hover:bg-cloud/10'
+            }`}
+            style={wdth}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ---------- Buttons ----------
 
 export const primaryBtn = (disabled: boolean) =>

@@ -4,6 +4,7 @@ import {
   STATUS,
   labelCls,
   Segmented,
+  Tabs,
   SiteFooter,
   SiteHeader,
   SUPABASE_ANON_KEY,
@@ -206,17 +207,14 @@ export default function TrackerPage({ token }: { token: string }) {
               </button>
             </div>
 
-            <div className="flex">
-              <Segmented
-                onDark
-                value={tab}
-                onChange={setTab}
-                options={[
-                  { value: 'report', label: 'report' },
-                  { value: 'manage', label: 'manage tracking' },
-                ]}
-              />
-            </div>
+            <Tabs
+              value={tab}
+              onChange={setTab}
+              options={[
+                { value: 'report', label: 'report' },
+                { value: 'manage', label: 'manage tracking' },
+              ]}
+            />
 
             {tab === 'report' && (
               <>
