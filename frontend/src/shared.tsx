@@ -118,10 +118,10 @@ export const labelCls = 'font-medium text-rust text-[14px] tracking-[0.28px] upp
 // Section titles: 28 (20 mobile) regular; accent words medium + rust (Figma 1:263)
 export const sectionTitleCls =
   'text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px] uppercase text-cloud font-normal';
-// Body copy: 15 regular, 1.6 line height (Figma 1:264)
-export const bodyCls = 'text-cloud text-[15px] leading-[1.6] font-normal';
+// Section body copy: design system body/large, 17 regular, 1.6 line height
+export const bodyCls = 'text-cloud text-[17px] leading-[1.6] font-normal';
 // Bordered surfaces: cloud fill + rust border, like the input panel
-export const sectionCls = 'flex flex-col gap-4 items-start px-[24px] md:px-[128px] xl:px-[256px] py-8 w-full';
+export const sectionCls = 'flex flex-col gap-6 items-start px-[24px] md:px-[128px] xl:px-[256px] py-12 w-full';
 
 export const surface = 'bg-cloud border border-rust rounded-lg';
 
