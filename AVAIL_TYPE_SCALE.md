@@ -6,7 +6,7 @@ Rule of thumb: **regular is the default; medium is only for emphasis words and s
 | Role | Size | Weight | Case / tracking | Color | Used for | Why |
 |---|---|---|---|---|---|---|
 | Hero H1 | 40 / 24 | Regular (accent words Medium) | none | cloud, accent rust | Page headline | Largest thing on the page, so it needs no weight to lead |
-| Wordmark | 24 | Semibold | Caps | cloud | AVAIL logo only | The only semibold on the page, so the brand is unmistakable |
+| Wordmark | 24 / 17 | Semibold | Caps | cloud | AVAIL logo only; its subtitle is 16 / 11.33 Medium caps (same 3:2 ratio) | The only semibold on the page, so the brand is unmistakable |
 | Section title | 28 / 20 | Regular (accent word Medium) | Caps, .56 / .4 | cloud, accent rust | "Exactly which MODELS we ask", "Why this MATTERS", "Not sure where to START?" | One accent word per title carries the emphasis |
 | CTA title | 20 | Medium | Caps, .4 | white on rust | Orange call-to-action card | Sits on a color field, so a little more weight keeps it readable |
 | Sub-head (dark page) | 20 | Regular | Caps, .4 | cloud | Tracker page: "By question", "Run history" | One step below section title |
