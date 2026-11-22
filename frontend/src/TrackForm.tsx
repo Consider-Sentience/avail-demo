@@ -61,7 +61,7 @@ export default function TrackForm() {
   }
 
   const inputCls =
-    'bg-white border border-solid border-slate/55 rounded h-[45px] w-full px-4 text-[15px] outline-none focus:border-rust';
+    'bg-white border border-solid border-slate/55 rounded-lg h-[45px] w-full px-4 text-[15px] outline-none focus:border-rust';
 
   return (
     <>
@@ -133,7 +133,7 @@ export default function TrackForm() {
       </button>
 
       {error && (
-        <div className="bg-status-fail-tint border border-status-fail/40 rounded p-4 w-full text-status-fail text-[14px] text-center">
+        <div className="bg-status-fail-tint border border-status-fail/40 rounded-lg p-4 w-full text-status-fail text-[14px] text-center">
           {error}
         </div>
       )}
