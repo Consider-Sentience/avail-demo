@@ -285,15 +285,10 @@ export function Wordmark() {
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="flex flex-col gap-1 items-center">
-        <a href="/" className="flex gap-[2px] items-center justify-center">
-          {['a', 'v', 'a', 'i', 'l'].map((ch, i) => (
-            <span key={i} className="flex items-center">
-              <span className="font-semibold text-cloud text-[24px] tracking-[0.48px] uppercase" style={wdth}>
-                {ch}
-              </span>
-              {i < 4 && <span className="size-1 rounded-full bg-cloud inline-block mx-[2px]" />}
-            </span>
-          ))}
+        <a href="/" className="flex items-center justify-center">
+          <span className="font-semibold text-cloud text-[24px] tracking-[0.48px] uppercase" style={wdth}>
+            AVAIL
+          </span>
         </a>
         <p className="font-medium text-cloud text-[16px] tracking-[0.32px] uppercase" style={wdth}>
           animal visibility ai landscape
