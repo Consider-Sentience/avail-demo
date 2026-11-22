@@ -69,7 +69,7 @@ export default function QuestionsField({
   return (
     <div className="flex flex-col gap-3 items-start w-full">
       <FieldLabel>Questions</FieldLabel>
-      <div className={`bg-white border border-solid rounded w-full p-4 ${text ? 'border-rust' : 'border-slate/55'}`}>
+      <div className={`bg-white border border-solid rounded-lg w-full p-4 ${text ? 'border-rust' : 'border-slate/55'}`}>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}

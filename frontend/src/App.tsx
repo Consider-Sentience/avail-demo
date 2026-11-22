@@ -131,7 +131,7 @@ function CheckForm() {
         ) : (
           <div className="flex flex-col gap-2 items-start w-full">
             <div
-              className={`bg-white border border-solid rounded h-[100px] w-full p-4 ${
+              className={`bg-white border border-solid rounded-lg h-[100px] w-full p-4 ${
                 customQuestion ? 'border-rust' : 'border-slate/55'
               }`}
             >
@@ -163,7 +163,7 @@ function CheckForm() {
       </button>
 
       {error && (
-        <div className="bg-status-fail-tint border border-status-fail/40 rounded p-4 w-full text-status-fail text-[14px] text-center">
+        <div className="bg-status-fail-tint border border-status-fail/40 rounded-lg p-4 w-full text-status-fail text-[14px] text-center">
           {error}
         </div>
       )}
