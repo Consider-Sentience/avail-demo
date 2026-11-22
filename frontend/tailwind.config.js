@@ -1,16 +1,22 @@
+import { colors, fontFamily } from 'cs-design-system';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        ink: '#1b2430',      // dark navy background
-        cloud: '#edeef1',    // light panel/text background
-        slate: '#4a4e55',    // secondary text
-        rust: '#c97c2e',     // primary accent orange
+        ink: colors.ink,
+        cloud: colors.cloud,
+        slate: colors.slate,
+        rust: colors.rust,
+        'status-fail': colors['status-fail'],
+        'status-pass': colors['status-pass'],
+        'status-fail-tint': colors['status-fail-tint'],
+        'sage-tint': colors['sage-tint'],
       },
       fontFamily: {
-        sans: ['"IBM Plex Sans"', 'sans-serif'],
+        ...fontFamily,
         nunito: ['Nunito', 'sans-serif'],
         serif: ['"Source Serif 4"', 'serif'],
       },

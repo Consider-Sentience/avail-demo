@@ -10,6 +10,7 @@ export const TRACKER_URL = EDGE_FUNCTION_URL.replace(/run-demo\/?$/, 'tracker');
 
 export const ORGS = [
   'Animal Equality',
+  'Balanced',
   'Compassion in World Farming',
   'Farm Sanctuary',
   'Faunalytics',
@@ -72,18 +73,18 @@ export function Dropdown({
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={`bg-white border border-solid flex h-[45px] items-center justify-between px-4 py-3 rounded w-full ${
-          open ? 'border-[#c97c2e]' : 'border-[rgba(74,78,85,0.55)]'
+          open ? 'border-rust' : 'border-[rgba(74,78,85,0.55)]'
         }`}
       >
         <p
-          className="flex-1 font-normal text-[#1a1c1e] text-[16px] text-ellipsis text-left overflow-hidden whitespace-nowrap"
+          className="flex-1 font-normal text-ink text-[15px] text-ellipsis text-left overflow-hidden whitespace-nowrap"
           style={wdth}
         >
           {value}
         </p>
         <div className={`shrink-0 size-4 flex items-center justify-center ${open ? '-scale-y-100' : ''}`}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M4 6l4 4 4-4" stroke="#1a1c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 6l4 4 4-4" stroke="#4A4E55" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </button>
@@ -99,7 +100,7 @@ export function Dropdown({
               }}
               className="bg-white hover:bg-cloud flex flex-col min-h-[52px] items-start justify-center px-3 py-2 w-full text-left"
             >
-              <p className="font-normal text-[16px] text-black" style={wdth}>
+              <p className="font-normal text-[15px] text-black" style={wdth}>
                 {opt}
               </p>
             </button>
@@ -110,27 +111,52 @@ export function Dropdown({
   );
 }
 
-// ---------- Pill toggle (same style as "sample questions / write your own") ----------
+// ---------- Type tokens (see AVAIL_TYPE_SCALE.md) ----------
+
+// Field labels and table headers: 14 / medium / rust / caps (Figma 1:561)
+export const labelCls = 'font-medium text-rust text-[14px] tracking-[0.28px] uppercase';
+// Section titles: 28 (20 mobile) regular; accent words medium + rust (Figma 1:263)
+export const sectionTitleCls =
+  'text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px] uppercase text-cloud font-normal';
+// Section body copy: design system body/large, 17 regular, 1.6 line height
+export const bodyCls = 'text-cloud text-[17px] leading-[1.6] font-normal';
+// Bordered surfaces: cloud fill + rust border, like the input panel
+export const sectionCls = 'flex flex-col gap-6 items-start px-[24px] md:px-[128px] xl:px-[256px] py-12 w-full';
+
+export const surface = 'bg-cloud border border-rust rounded-lg';
+
+// ---------- Pill toggle ----------
+// "primary": top-level mode switch. "secondary": sub-options inside a form (smaller, so the hierarchy reads).
 
 export function Segmented<T extends string>({
   value,
   options,
   onChange,
+  size = 'primary',
+  onDark = false,
 }: {
   value: T;
   options: { value: T; label: string }[];
   onChange: (v: T) => void;
+  size?: 'primary' | 'secondary';
+  onDark?: boolean; // for use on the navy page background (orange primary, light secondary)
 }) {
+  const sm = size === 'secondary';
+  const border = onDark ? (sm ? 'border-cloud/40' : 'border-rust') : sm ? 'border-slate/45' : 'border-ink/55';
+  const active = onDark
+    ? sm ? 'bg-cloud text-ink font-medium' : 'bg-rust text-white font-medium'
+    : `${sm ? 'bg-slate' : 'bg-ink'} text-white font-medium`;
+  const inactive = `${onDark ? 'text-cloud' : 'text-ink'} font-normal`;
   return (
-    <div className="border border-ink/55 rounded-full flex items-center p-[6px]">
+    <div className={`border ${border} rounded-full inline-flex items-center ${sm ? 'p-[4px]' : 'p-[6px]'}`}>
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
-          className={`rounded-full px-3 py-2 text-[12px] uppercase transition-colors ${
-            value === o.value ? 'bg-ink text-white font-medium' : 'text-ink font-normal'
-          }`}
+          className={`rounded-full uppercase whitespace-nowrap transition-colors ${
+            sm ? 'px-[10px] py-[6px] text-[11px]' : 'px-3 py-[10px] text-[12px]'
+          } ${value === o.value ? active : inactive}`}
           style={wdth}
         >
           {o.label}
@@ -140,19 +166,68 @@ export function Segmented<T extends string>({
   );
 }
 
+// Folder-style tabs for switching between views of the same thing (e.g. Report / Manage tracking).
+// Built for the navy page: the active tab is a cloud-gray tab with orange caps that opens into the slate baseline.
+export function Tabs<T extends string>({
+  value,
+  options,
+  onChange,
+}: {
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+}) {
+  function onKey(e: React.KeyboardEvent, i: number) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const next = options[(i + (e.key === 'ArrowRight' ? 1 : options.length - 1)) % options.length];
+    onChange(next.value);
+    (e.currentTarget.parentElement?.querySelector(`[data-tab="${next.value}"]`) as HTMLElement | null)?.focus();
+  }
+  return (
+    <div role="tablist" className="flex items-end w-full border-b border-slate">
+      {options.map((o, i) => {
+        const on = value === o.value;
+        return (
+          <button
+            key={o.value}
+            type="button"
+            role="tab"
+            data-tab={o.value}
+            aria-selected={on}
+            tabIndex={on ? 0 : -1}
+            onClick={() => onChange(o.value)}
+            onKeyDown={(e) => onKey(e, i)}
+            className={`relative -mb-px ${i > 0 ? '-ml-px' : ''} rounded-t-lg border border-b-0 border-slate px-4 py-2 md:px-5 md:py-[10px] text-[12px] md:text-[14px] tracking-[0.24px] md:tracking-[0.28px] uppercase whitespace-nowrap transition-colors cursor-pointer ${
+              on ? 'z-10 bg-cloud text-rust font-medium' : 'bg-cloud/5 text-cloud font-normal hover:bg-cloud/10'
+            }`}
+            style={wdth}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ---------- Buttons ----------
 
 export const primaryBtn = (disabled: boolean) =>
   `rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] tracking-[0.28px] md:tracking-[0.32px] uppercase transition-colors ${
-    disabled ? 'bg-slate/40 text-white cursor-default' : 'bg-rust text-cloud cursor-pointer hover:bg-[#1b2430]'
+    disabled ? 'bg-slate/40 text-white cursor-default' : 'bg-rust text-cloud cursor-pointer hover:bg-ink'
   }`;
 
 export const secondaryBtn =
-  'whitespace-nowrap bg-cloud border border-slate rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] uppercase tracking-[0.28px] md:tracking-[0.32px] text-ink hover:bg-[#4a4e55] hover:text-cloud transition-colors cursor-pointer';
+  'whitespace-nowrap bg-cloud border border-slate rounded-full px-[14px] py-[10px] md:px-4 md:py-3 text-[14px] md:text-[16px] uppercase tracking-[0.28px] md:tracking-[0.32px] text-ink hover:bg-slate hover:text-cloud transition-colors cursor-pointer';
+
+// Small pill button (same scale as the secondary toggle) for in-form actions like "upload csv"
+export const smallBtn =
+  'group inline-flex items-center gap-2 whitespace-nowrap bg-cloud border border-slate rounded-full px-3 py-[7px] text-[11px] uppercase tracking-[0.22px] text-ink hover:bg-slate hover:text-cloud transition-colors cursor-pointer';
 
 export function FieldLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="font-medium text-rust text-[14px] tracking-[0.28px] uppercase" style={wdth}>
+    <p className={labelCls} style={wdth}>
       {children}
     </p>
   );
@@ -162,12 +237,12 @@ export function FieldLabel({ children }: { children: ReactNode }) {
 
 export function SiteHeader() {
   return (
-    <header className="absolute top-0 left-0 right-0 bg-ink flex flex-col gap-[8px] items-start justify-center p-[16px] z-10">
+    <header className="fixed top-0 left-0 right-0 bg-ink flex flex-col gap-[8px] items-start justify-center p-[16px] z-10">
       <a href="https://considersentience.ai" className="block h-[32px] w-[199px]">
         <img src="/logo.svg" alt="Consider Sentience" className="h-[32px] w-[199px] object-cover" />
       </a>
       <a href="https://considersentience.ai" className="group relative block h-[21px]">
-        <div className="group-hover:hidden [word-break:break-word] content-stretch flex gap-[5px] items-center justify-center leading-[0] relative text-[#edeef1] text-center w-[127px] whitespace-nowrap">
+        <div className="group-hover:hidden [word-break:break-word] content-stretch flex gap-[5px] items-center justify-center leading-[0] relative text-cloud text-center w-[127px] whitespace-nowrap">
           <div className="capitalize flex flex-col font-['Nunito'] font-extralight justify-center relative shrink-0 text-[20px]">
             <p className="leading-none">[</p>
           </div>
@@ -187,7 +262,7 @@ export function SiteHeader() {
           <div className="[word-break:break-word] capitalize flex flex-col font-['Nunito'] font-light justify-center leading-[0] relative shrink-0 text-[20px] text-[rgba(201,124,46,0.7)] text-center whitespace-nowrap">
             <p className="leading-none">[</p>
           </div>
-          <div className="[word-break:break-word] flex flex-col font-['Source_Serif_4'] font-medium italic justify-center leading-[0] relative shrink-0 text-[#edeef1] text-[14px] text-center whitespace-nowrap">
+          <div className="[word-break:break-word] flex flex-col font-['Source_Serif_4'] font-medium italic justify-center leading-[0] relative shrink-0 text-cloud text-[14px] text-center whitespace-nowrap">
             <p className="leading-[1.5]">return to site</p>
           </div>
           <div className="[word-break:break-word] capitalize flex flex-col font-['Nunito'] font-light justify-center leading-[0] relative shrink-0 text-[20px] text-[rgba(201,124,46,0.7)] text-center whitespace-nowrap">
@@ -210,17 +285,12 @@ export function Wordmark() {
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="flex flex-col gap-1 items-center">
-        <a href="/" className="flex gap-[2px] items-center justify-center">
-          {['a', 'v', 'a', 'i', 'l'].map((ch, i) => (
-            <span key={i} className="flex items-center">
-              <span className="font-semibold text-cloud text-[24px] tracking-[0.48px] uppercase" style={wdth}>
-                {ch}
-              </span>
-              {i < 4 && <span className="size-1 rounded-full bg-cloud inline-block mx-[2px]" />}
-            </span>
-          ))}
+        <a href="/" className="flex items-center justify-center">
+          <span className="font-semibold text-cloud text-[17px] tracking-[0.34px] md:text-[24px] md:tracking-[0.48px] uppercase" style={wdth}>
+            AVAIL
+          </span>
         </a>
-        <p className="font-medium text-cloud text-[16px] tracking-[0.32px] uppercase" style={wdth}>
+        <p className="font-medium text-cloud text-[11.33px] tracking-[0.23px] md:text-[16px] md:tracking-[0.32px] uppercase" style={wdth}>
           animal visibility ai landscape
         </p>
       </div>
@@ -248,89 +318,76 @@ export function SiteFooter() {
   );
 }
 
-// ---------- Design-system pieces (CS Solutions Design System) ----------
+// ---------- Cards, accordion, tables (AVAIL style: cloud + rust borders, caps labels) ----------
 
-// Card — Finding/Callout (8:257)
-export function FindingCard({ stat, label, quote }: { stat: string; label: string; quote: string }) {
+// Stat card
+export function FindingCard({ stat, label }: { stat: string; label: string }) {
   return (
-    <div className="bg-white border border-[rgba(74,78,85,0.12)] border-solid flex flex-col gap-[16px] items-start p-[24px] rounded-[8px] w-full">
-      <div className="flex flex-col gap-[8px] items-start w-full">
-        <p className="font-semibold leading-[44px] text-rust text-[36px] w-full" style={wdth}>{stat}</p>
-        <p className="font-medium leading-[24px] text-slate text-[15px] w-full" style={wdth}>{label}</p>
-      </div>
-      <div className="bg-[rgba(74,78,85,0.15)] h-px w-full" />
-      <div className="flex gap-[12px] items-start w-full">
-        <div className="bg-[rgba(201,124,46,0.5)] h-[40px] rounded-[2px] shrink-0 w-[3px]" />
-        <p className="flex-1 font-normal leading-[20px] min-w-px text-slate text-[13px]" style={wdth}>{quote}</p>
-      </div>
+    <div className={`${surface} flex flex-col gap-2 p-6 w-full`}>
+      <p className="font-medium leading-[1.2] text-rust text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px]" style={wdth}>
+        {stat}
+      </p>
+      <p className="font-normal leading-[1.6] text-ink text-[15px]" style={wdth}>{label}</p>
     </div>
   );
 }
 
-// Accordion row (8:271 collapsed / 8:275 expanded)
+// Accordion +/- mark: both strokes share one length and thickness
+function AccordionIcon({ open }: { open: boolean }) {
+  return (
+    <svg className="shrink-0 text-rust" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2 8H14" stroke="currentColor" strokeWidth="1.5" />
+      {!open && <path d="M8 2V14" stroke="currentColor" strokeWidth="1.5" />}
+    </svg>
+  );
+}
+
+// Accordion row
 export function AccordionRow({ title, children }: { title: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    // Design-system accordion is tinted-on-light; on AVAIL's dark page it sits on a cloud card (same as the input panel)
-    <div className="bg-cloud flex flex-col items-start rounded-[8px] w-full">
+    <div className={`${surface} flex flex-col w-full`}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex items-center justify-between gap-4 px-[16px] py-[12px] w-full text-left"
+        className="flex items-center justify-between gap-4 px-4 md:px-6 py-4 w-full text-left"
       >
-        <span className="font-medium leading-[24px] text-ink text-[15px]" style={wdth}>{title}</span>
-        <span className={`shrink-0 text-rust ${open ? 'text-[16px]' : 'text-[24px]'}`} style={wdth}>
-          {open ? '—' : '+'}
+        <span className="font-normal text-ink text-[15px] md:text-[16px]" style={wdth}>
+          {title}
         </span>
+        <AccordionIcon open={open} />
       </button>
       {open && (
-        <div className="flex flex-col gap-3 items-start p-[16px] pt-0 w-full">
-          <div className="font-normal leading-[20px] text-slate text-[13px] w-full flex flex-col gap-3" style={wdth}>
-            {children}
-          </div>
+        <div className="border-t border-rust/40 px-4 md:px-6 py-4 flex flex-col gap-3 text-slate text-[14px] leading-[1.6] font-normal" style={wdth}>
+          {children}
         </div>
       )}
     </div>
   );
 }
 
-// Leaderboard-style table of exactly which models are queried.
+// Models table. One shared grid template keeps header and rows aligned.
+const MODELS_GRID = 'md:grid md:grid-cols-[1.1fr_1.1fr_1fr_2fr] md:gap-x-8';
+
 export function ModelsTable() {
   return (
-    <div className="bg-white border border-[rgba(74,78,85,0.12)] border-solid flex flex-col overflow-hidden rounded-[8px] w-full">
-      <div className="hidden md:flex items-center px-[16px] py-[10px] border border-[rgba(74,78,85,0.15)]">
-        {['Assistant', 'Exact model ID', 'Served by', 'How it finds sources'].map((h, i) => (
-          <p
-            key={h}
-            className={`font-semibold leading-[16px] text-slate text-[11px] uppercase ${
-              ['w-[190px]', 'w-[260px]', 'w-[130px]', 'flex-1'][i]
-            } shrink-0 ${i === 3 ? 'shrink' : ''}`}
-            style={wdth}
-          >
-            {h}
-          </p>
+    <div className={`${surface} overflow-hidden w-full`}>
+      <div className={`hidden ${MODELS_GRID} px-6 py-3 border-b border-rust`}>
+        {['Assistant', 'Exact model ID', 'Served by', 'How it finds sources'].map((h) => (
+          <p key={h} className={labelCls} style={wdth}>{h}</p>
         ))}
       </div>
-      {MODELS.map((m, i) => (
-        <div
-          key={m.key}
-          className={`flex flex-col md:flex-row md:items-center gap-1 md:gap-0 px-[16px] py-[10px] border border-[rgba(74,78,85,0.08)] ${
-            i % 2 ? 'bg-[rgba(237,238,241,0.5)]' : 'bg-white'
-          }`}
-        >
-          <p className="font-medium leading-[20px] text-ink text-[14px] md:w-[190px] shrink-0 md:pr-4" style={wdth}>
-            {m.name}
-          </p>
-          <p className="font-normal leading-[20px] text-ink text-[13px] md:w-[260px] shrink-0 md:pr-4 break-all" style={wdth}>
-            {m.modelId}
-          </p>
-          <p className="font-normal leading-[20px] text-slate text-[13px] md:w-[130px] shrink-0 md:pr-4" style={wdth}>
-            {m.provider}
-          </p>
-          <p className="font-normal leading-[20px] text-slate text-[13px] flex-1" style={wdth}>{m.how}</p>
-        </div>
-      ))}
+      <div className="divide-y divide-rust/40">
+        {MODELS.map((m) => (
+          <div key={m.key} className={`flex flex-col gap-1 px-4 md:px-6 py-4 ${MODELS_GRID} md:items-start`}>
+            <p className="font-normal leading-[1.6] text-ink text-[15px]" style={wdth}>{m.name}</p>
+            <p className="font-normal leading-[1.6] text-slate text-[14px] break-all" style={wdth}>{m.modelId}</p>
+            <p className="font-normal leading-[1.6] text-slate text-[14px]" style={wdth}>{m.provider}</p>
+            <p className="font-normal leading-[1.6] text-slate text-[14px]" style={wdth}>{m.how}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

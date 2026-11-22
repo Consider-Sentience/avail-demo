@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import {
   Dot,
+  labelCls,
+  bodyCls,
+  sectionCls,
+  sectionTitleCls,
   Dropdown,
   EDGE_FUNCTION_URL,
   FieldLabel,
@@ -39,6 +43,7 @@ const SAMPLE_QUESTIONS = [
 // org_specific category. Shown first in the dropdown whenever that org is selected.
 const ORG_SPECIFIC_QUESTIONS: Record<string, string> = {
   'Animal Equality': 'Does Animal Equality do undercover investigations?',
+  'Balanced': 'What does Balanced do to improve nutrition security?',
   'Compassion in World Farming': 'Is Compassion in World Farming a UK-only organization?',
   'Farm Sanctuary': 'What has Farm Sanctuary accomplished for animal welfare?',
   'Faunalytics': 'What does Faunalytics research?',
@@ -113,6 +118,7 @@ function CheckForm() {
       <div className="flex flex-col gap-3 items-start w-full">
         <FieldLabel>Question</FieldLabel>
         <Segmented
+          size="secondary"
           value={useCustom ? 'custom' : 'sample'}
           onChange={(v) => setUseCustom(v === 'custom')}
           options={[
@@ -126,7 +132,7 @@ function CheckForm() {
           <div className="flex flex-col gap-2 items-start w-full">
             <div
               className={`bg-white border border-solid rounded h-[100px] w-full p-4 ${
-                customQuestion ? 'border-[#c97c2e]' : 'border-slate/55'
+                customQuestion ? 'border-rust' : 'border-slate/55'
               }`}
             >
               <textarea
@@ -134,12 +140,12 @@ function CheckForm() {
                 onChange={(e) => setCustomQuestion(e.target.value.slice(0, 280))}
                 placeholder="Ask something about animal welfare, farming, or vegan living..."
                 className={`w-full h-full resize-none border-none outline-none text-[15px] placeholder:text-slate/55 bg-transparent ${
-                  customQuestion ? 'text-[#1b2430]' : ''
+                  customQuestion ? 'text-ink' : ''
                 }`}
                 style={wdth}
               />
             </div>
-            <p className={`text-[12px] self-end ${customQuestion ? 'text-[#1b2430]' : 'text-slate/55'}`} style={wdth}>
+            <p className={`text-[12px] self-end ${customQuestion ? 'text-ink' : 'text-slate/55'}`} style={wdth}>
               {customQuestion.length} / 280
             </p>
           </div>
@@ -157,49 +163,54 @@ function CheckForm() {
       </button>
 
       {error && (
-        <div className="bg-white border border-[#a85c4a]/40 rounded p-4 w-full text-[#a85c4a] text-[14px] text-center">
+        <div className="bg-status-fail-tint border border-status-fail/40 rounded-lg p-4 w-full text-status-fail text-[14px] text-center">
           {error}
         </div>
       )}
 
       {results && (
-        <div className="flex flex-col gap-4 w-full">
-          <p className="font-medium text-ink text-[16px] tracking-[0.28px] uppercase" style={wdth}>Results</p>
-          <div className="bg-white border border-[rgba(74,78,85,0.12)] border-solid flex flex-col overflow-hidden rounded-[8px] w-full">
-            {results.map((r, idx) => {
-              const m = modelByLabel(r.assistant);
-              const dot = r.status === 'unavailable' ? STATUS.neutral : r.cited ? STATUS.pass : STATUS.fail;
-              const label =
-                r.status === 'unavailable' ? 'Temporarily unavailable' : r.cited ? 'Cited directly' : 'Not cited directly';
-              return (
-                <div
-                  key={r.assistant}
-                  className={`flex flex-col md:flex-row md:items-center gap-2 px-[16px] py-[10px] border border-[rgba(74,78,85,0.08)] ${
-                    idx % 2 ? 'bg-[rgba(237,238,241,0.5)]' : 'bg-white'
-                  }`}
-                >
-                  <div className="md:w-[240px] shrink-0">
-                    <p className="font-medium leading-[20px] text-ink text-[14px]" style={wdth}>{m?.name ?? r.assistant}</p>
-                    <p className="text-slate text-[12px] break-all" style={wdth}>{m?.modelId}</p>
+        <div className="flex flex-col gap-3 w-full">
+          <p className={labelCls} style={wdth}>Results</p>
+          <div className="bg-cloud border border-rust rounded-lg overflow-hidden w-full">
+            <div className="hidden md:grid md:grid-cols-[1.3fr_1.1fr_1.6fr] md:gap-x-6 px-6 py-3 border-b border-rust">
+              {['Assistant', 'Result', 'Source'].map((h) => (
+                <p key={h} className={labelCls} style={wdth}>{h}</p>
+              ))}
+            </div>
+            <div className="divide-y divide-rust/40">
+              {results.map((r) => {
+                const m = modelByLabel(r.assistant);
+                const dot = r.status === 'unavailable' ? STATUS.neutral : r.cited ? STATUS.pass : STATUS.fail;
+                const label =
+                  r.status === 'unavailable' ? 'Temporarily unavailable' : r.cited ? 'Cited directly' : 'Not cited directly';
+                return (
+                  <div
+                    key={r.assistant}
+                    className="flex flex-col gap-2 px-4 md:px-6 py-4 md:grid md:grid-cols-[1.3fr_1.1fr_1.6fr] md:gap-x-6 md:items-start"
+                  >
+                    <div>
+                      <p className="font-normal leading-[1.6] text-ink text-[15px]" style={wdth}>{m?.name ?? r.assistant}</p>
+                      <p className="font-normal text-slate text-[12px] break-all" style={wdth}>{m?.modelId}</p>
+                    </div>
+                    <div className="flex items-center gap-[8px]">
+                      <Dot color={dot} />
+                      <span className="font-normal text-ink text-[14px]" style={wdth}>{label}</span>
+                    </div>
+                    <div className="min-w-0">
+                      {r.status === 'ok' && r.cited && r.matchedUrl ? (
+                        <a href={r.matchedUrl} target="_blank" rel="noreferrer" className="text-[12px] text-slate break-all underline hover:text-rust">
+                          {r.matchedUrl}
+                        </a>
+                      ) : r.status === 'ok' ? (
+                        <span className="text-slate text-[14px]" style={wdth}>
+                          {r.totalCitations ?? 0} other source{r.totalCitations === 1 ? '' : 's'} cited
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-[6px] md:w-[190px] shrink-0">
-                    <Dot color={dot} />
-                    <span className="font-medium text-ink text-[13px]" style={wdth}>{label}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    {r.status === 'ok' && r.cited && r.matchedUrl ? (
-                      <a href={r.matchedUrl} target="_blank" rel="noreferrer" className="text-[12px] text-slate break-all underline">
-                        {r.matchedUrl}
-                      </a>
-                    ) : r.status === 'ok' ? (
-                      <span className="text-slate text-[13px]" style={wdth}>
-                        {r.totalCitations ?? 0} other source{r.totalCitations === 1 ? '' : 's'} cited
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
@@ -232,21 +243,16 @@ function HomePage() {
         <Wordmark />
 
         <div className="flex flex-col gap-[20px] md:gap-[24px] xl:gap-[32px] items-start w-full">
-          <div className="flex md:hidden flex-col gap-[6px] items-center justify-center text-[24px] tracking-[0.24px] uppercase w-full text-center">
-            <div className="flex gap-[8px] items-center justify-center whitespace-nowrap">
-              <span className="text-cloud font-normal" style={wdth}>Does AI</span>
-              <span className="text-rust font-medium" style={wdth}>actually</span>
-            </div>
-            <span className="text-cloud font-normal" style={wdth}>cite this organization's work?</span>
-          </div>
-          <div className="hidden md:flex flex-col gap-[10px] xl:gap-[12px] items-center justify-center text-[32px] xl:text-[40px] tracking-[0.32px] xl:tracking-[0.4px] uppercase w-full text-center whitespace-nowrap">
-            <div className="flex gap-[12px] items-center justify-center">
-              <span className="text-cloud font-normal" style={wdth}>Does AI</span>
-              <span className="text-rust font-medium" style={wdth}>actually</span>
-              <span className="text-cloud font-normal" style={wdth}>cite this</span>
-            </div>
-            <span className="text-cloud font-normal" style={wdth}>organization's work?</span>
-          </div>
+          {/* One paragraph so every line break gets the same line-height (no per-line gaps) */}
+          <h1
+            className="text-[24px] md:text-[32px] xl:text-[40px] tracking-[0.24px] md:tracking-[0.32px] xl:tracking-[0.4px] leading-[1.4] uppercase w-full text-center text-cloud font-normal md:flex md:flex-col md:items-center"
+            style={{ ...wdth, textWrap: 'balance' } as React.CSSProperties}
+          >
+            <span className="md:whitespace-nowrap">When people ask AI about animals,</span>{' '}
+            <span className="md:whitespace-nowrap">
+              <span className="text-rust font-medium">who</span> does it <span className="text-rust font-medium">cite</span>?
+            </span>
+          </h1>
           <div className="flex flex-col items-center w-full">
             <p
               className="text-cloud text-[16px] md:text-[18px] xl:text-[20px] text-center tracking-[-0.08px] md:tracking-[-0.09px] xl:tracking-[-0.1px] leading-[1.6] max-w-[768px]"
@@ -254,8 +260,8 @@ function HomePage() {
             >
               Millions of people are going straight to LLMs to ask questions about welfare, sentience,
               advocacy, and other topics related to non-human animals. But many of the answers they
-              receive do not cite the wealth of information contained in websites, publications, and
-              other resources from animal advocacy organizations. We want to change that.
+              receive do not cite the wealth of information contained in resources from animal
+              advocacy organizations. We want to change that.
             </p>
           </div>
         </div>
@@ -279,21 +285,17 @@ function HomePage() {
       <ModelsSection />
       <WhySection />
 
-      {/* Credibility section — exact values from Figma nodes 1:262 (desktop/tablet), 1:363 (mobile) */}
-      <section className="flex flex-col gap-4 items-start px-[24px] md:px-[128px] xl:px-[256px] py-8 w-full">
-        <p className="text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px] uppercase text-cloud" style={wdth}>
-          <span className="font-normal tracking-[0.32px]">This demo is </span>
-          <span className="text-rust tracking-[0.32px]">one query</span>
-          <span className="font-normal tracking-[0.32px]">. </span>
-          <span className="font-normal tracking-[0.32px]">Our pilot ran</span>
-          <span className="text-rust tracking-[0.32px]"> 480</span>
-          <span>.</span>
-        </p>
-        <p className="text-cloud text-[15px] leading-[1.6]" style={wdth}>
-          We evaluated major conversational systems using a diverse set of 60 core animal protection
-          questions across multiple runs. This live demo uses the exact same pipeline to verify
-          real-time citations.
-        </p>
+      {/* "Where to start" section: same layout and type as Figma 1:262 */}
+      <section className={sectionCls}>
+        <div className="flex flex-col gap-3 w-full">
+          <p className={sectionTitleCls} style={wdth}>
+            Not sure where to <span className="font-medium text-rust">start</span>?
+          </p>
+          <p className={bodyCls} style={wdth}>
+            Use our open dataset of real questions people ask AI about animals as a starting point for your own list.
+            Our pilot ran 60 of them across multiple runs, 480 responses in all, using the same approach as this tool.
+          </p>
+        </div>
         <a
           href="https://huggingface.co/datasets/considersentience/animal-welfare-veganism-query-corpus"
           target="_blank"
