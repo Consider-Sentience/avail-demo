@@ -72,7 +72,7 @@ export function Dropdown({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={`bg-white border border-solid flex h-[45px] items-center justify-between px-4 py-3 rounded-lg w-full ${
+        className={`bg-white border border-solid flex h-[45px] items-center justify-between px-4 py-3 rounded w-full ${
           open ? 'border-rust' : 'border-[rgba(74,78,85,0.55)]'
         }`}
       >
@@ -89,7 +89,7 @@ export function Dropdown({
         </div>
       </button>
       {open && (
-        <div className="flex flex-col items-start overflow-hidden rounded-lg relative shrink-0 w-full drop-shadow-[0px_0px_12px_rgba(0,0,0,0.2)] z-20">
+        <div className="flex flex-col items-start overflow-hidden rounded relative shrink-0 w-full drop-shadow-[0px_0px_12px_rgba(0,0,0,0.2)] z-20">
           {options.map((opt) => (
             <button
               key={opt}

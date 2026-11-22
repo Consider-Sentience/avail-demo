@@ -131,7 +131,7 @@ function CheckForm() {
         ) : (
           <div className="flex flex-col gap-2 items-start w-full">
             <div
-              className={`bg-white border border-solid rounded-lg h-[100px] w-full p-4 ${
+              className={`bg-white border border-solid rounded h-[100px] w-full p-4 ${
                 customQuestion ? 'border-rust' : 'border-slate/55'
               }`}
             >
