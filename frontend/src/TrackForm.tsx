@@ -61,7 +61,7 @@ export default function TrackForm() {
   }
 
   const inputCls =
-    'bg-white border border-solid border-slate/55 rounded-lg h-[45px] w-full px-4 text-[15px] outline-none focus:border-rust';
+    'bg-white border border-solid border-slate/55 rounded h-[45px] w-full px-4 text-[15px] outline-none focus:border-rust';
 
   return (
     <>
