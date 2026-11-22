@@ -287,13 +287,15 @@ function HomePage() {
 
       {/* "Where to start" section: same layout and type as Figma 1:262 */}
       <section className={sectionCls}>
-        <p className={sectionTitleCls} style={wdth}>
-          Not sure where to <span className="font-medium text-rust">start</span>?
-        </p>
-        <p className={bodyCls} style={wdth}>
-          Use our open dataset of real questions people ask AI about animals as a starting point for your own list.
-          Our pilot ran 60 of them across multiple runs, 480 responses in all, using the same approach as this tool.
-        </p>
+        <div className="flex flex-col gap-3 w-full">
+          <p className={sectionTitleCls} style={wdth}>
+            Not sure where to <span className="font-medium text-rust">start</span>?
+          </p>
+          <p className={bodyCls} style={wdth}>
+            Use our open dataset of real questions people ask AI about animals as a starting point for your own list.
+            Our pilot ran 60 of them across multiple runs, 480 responses in all, using the same approach as this tool.
+          </p>
+        </div>
         <a
           href="https://huggingface.co/datasets/considersentience/animal-welfare-veganism-query-corpus"
           target="_blank"

@@ -118,10 +118,10 @@ export const labelCls = 'font-medium text-rust text-[14px] tracking-[0.28px] upp
 // Section titles: 28 (20 mobile) regular; accent words medium + rust (Figma 1:263)
 export const sectionTitleCls =
   'text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px] uppercase text-cloud font-normal';
-// Body copy: 15 regular, 1.6 line height (Figma 1:264)
-export const bodyCls = 'text-cloud text-[15px] leading-[1.6] font-normal';
+// Section body copy: design system body/large, 17 regular, 1.6 line height
+export const bodyCls = 'text-cloud text-[17px] leading-[1.6] font-normal';
 // Bordered surfaces: cloud fill + rust border, like the input panel
-export const sectionCls = 'flex flex-col gap-4 items-start px-[24px] md:px-[128px] xl:px-[256px] py-8 w-full';
+export const sectionCls = 'flex flex-col gap-6 items-start px-[24px] md:px-[128px] xl:px-[256px] py-12 w-full';
 
 export const surface = 'bg-cloud border border-rust rounded-lg';
 
@@ -237,7 +237,7 @@ export function FieldLabel({ children }: { children: ReactNode }) {
 
 export function SiteHeader() {
   return (
-    <header className="absolute top-0 left-0 right-0 bg-ink flex flex-col gap-[8px] items-start justify-center p-[16px] z-10">
+    <header className="fixed top-0 left-0 right-0 bg-ink flex flex-col gap-[8px] items-start justify-center p-[16px] z-10">
       <a href="https://considersentience.ai" className="block h-[32px] w-[199px]">
         <img src="/logo.svg" alt="Consider Sentience" className="h-[32px] w-[199px] object-cover" />
       </a>
@@ -286,11 +286,11 @@ export function Wordmark() {
     <div className="flex flex-col gap-4 items-center">
       <div className="flex flex-col gap-1 items-center">
         <a href="/" className="flex items-center justify-center">
-          <span className="font-semibold text-cloud text-[24px] tracking-[0.48px] uppercase" style={wdth}>
+          <span className="font-semibold text-cloud text-[17px] tracking-[0.34px] md:text-[24px] md:tracking-[0.48px] uppercase" style={wdth}>
             AVAIL
           </span>
         </a>
-        <p className="font-medium text-cloud text-[16px] tracking-[0.32px] uppercase" style={wdth}>
+        <p className="font-medium text-cloud text-[11.33px] tracking-[0.23px] md:text-[16px] md:tracking-[0.32px] uppercase" style={wdth}>
           animal visibility ai landscape
         </p>
       </div>
@@ -332,6 +332,16 @@ export function FindingCard({ stat, label }: { stat: string; label: string }) {
   );
 }
 
+// Accordion +/- mark: both strokes share one length and thickness
+function AccordionIcon({ open }: { open: boolean }) {
+  return (
+    <svg className="shrink-0 text-rust" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2 8H14" stroke="currentColor" strokeWidth="1.5" />
+      {!open && <path d="M8 2V14" stroke="currentColor" strokeWidth="1.5" />}
+    </svg>
+  );
+}
+
 // Accordion row
 export function AccordionRow({ title, children }: { title: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -346,7 +356,7 @@ export function AccordionRow({ title, children }: { title: string; children: Rea
         <span className="font-normal text-ink text-[15px] md:text-[16px]" style={wdth}>
           {title}
         </span>
-        <span className="shrink-0 text-rust text-[24px] leading-none font-normal" style={wdth}>{open ? '—' : '+'}</span>
+        <AccordionIcon open={open} />
       </button>
       {open && (
         <div className="border-t border-rust/40 px-4 md:px-6 py-4 flex flex-col gap-3 text-slate text-[14px] leading-[1.6] font-normal" style={wdth}>
