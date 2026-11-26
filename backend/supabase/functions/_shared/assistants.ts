@@ -18,8 +18,8 @@ export const KNOWN_ORGS: Record<string, string[]> = {
   "Humane Society International": ["humaneworld.org", "hsi.org"],
 };
 
-// Default assistants for scheduled runs. ChatGPT is opt-in: reasoning tokens +
-// search fees made it ~10x the cost of the others in the pilot.
+// Display labels for each assistant. ChatGPT costs more per answer (reasoning tokens +
+// search fees), so run-worker gives it a separate daily cap.
 export const ASSISTANT_LABELS: Record<string, string> = {
   claude: "Claude",
   perplexity: "Perplexity",

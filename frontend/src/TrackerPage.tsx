@@ -19,6 +19,7 @@ import {
 } from './shared';
 import { modelByKey } from './models';
 import QuestionsField, { MAX_QUESTIONS } from './QuestionsField';
+import { SAMPLE_QUESTIONS, orgQuestionFor } from './samples';
 
 type Item = {
   run_id: string;
@@ -66,7 +67,7 @@ function rateFor(items: Item[], runId: string, assistant: string): { rate: numbe
 }
 
 const th = labelCls;
-const subhead = 'text-cloud text-[20px] tracking-[0.4px] uppercase font-normal';
+const subhead = 'text-cloud text-[16px] md:text-[20px] tracking-[0.32px] md:tracking-[0.4px] uppercase font-normal';
 
 export default function TrackerPage({ token }: { token: string }) {
   const [data, setData] = useState<Data | null>(null);
@@ -163,6 +164,9 @@ export default function TrackerPage({ token }: { token: string }) {
     }
   }
 
+  const draftCount = draftText.split('\n').filter((l) => l.trim()).length;
+  const canSave = dirty && !saving && draftCount > 0 && draftCount <= MAX_QUESTIONS;
+
   function copyLink() {
     navigator.clipboard?.writeText(window.location.href).then(() => {
       setCopied(true);
@@ -249,7 +253,7 @@ export default function TrackerPage({ token }: { token: string }) {
                   const delta = cur.rate !== null && prev?.rate != null ? cur.rate - prev.rate : null;
                   return (
                     <div key={key} className="bg-cloud border border-rust rounded-lg p-6 flex flex-col gap-2">
-                      <p className="font-medium leading-[1.2] text-rust text-[28px] tracking-[0.56px]" style={wdth}>
+                      <p className="font-medium leading-[1.2] text-rust text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px]" style={wdth}>
                         {cur.rate === null ? '—' : `${Math.round(cur.rate)}%`}
                       </p>
                       <p className={labelCls} style={wdth}>{m?.name ?? key}</p>
@@ -272,7 +276,7 @@ export default function TrackerPage({ token }: { token: string }) {
                   <div className="flex items-center px-4 py-3 border-b border-rust">
                     <p className={`${th} flex-1`} style={wdth}>Question</p>
                     {data.tracker.assistants.map((k) => (
-                      <p key={k} className={`${th} w-[120px] shrink-0`} style={wdth}>{modelByKey(k)?.name.split(' ')[0] ?? k}</p>
+                      <p key={k} className={`${th} w-[120px] shrink-0`} style={wdth}>{modelByKey(k)?.short ?? k}</p>
                     ))}
                   </div>
                   <div className="divide-y divide-rust/40">
@@ -339,7 +343,7 @@ export default function TrackerPage({ token }: { token: string }) {
                   <div className="flex items-center px-4 py-3 border-b border-rust">
                     <p className={`${th} w-[140px] shrink-0`} style={wdth}>Date</p>
                     {data.tracker.assistants.map((k) => (
-                      <p key={k} className={`${th} flex-1`} style={wdth}>{modelByKey(k)?.name.split(' ')[0] ?? k}</p>
+                      <p key={k} className={`${th} flex-1`} style={wdth}>{modelByKey(k)?.short ?? k}</p>
                     ))}
                   </div>
                   <div className="divide-y divide-rust/40">
@@ -378,8 +382,25 @@ export default function TrackerPage({ token }: { token: string }) {
                         : ''}
                 </p>
 
-                <div className="flex flex-col gap-3 items-start w-full">
-                  <FieldLabel>How often</FieldLabel>
+                <div className="w-full">
+                  <QuestionsField
+                    onDark
+                    samples={[
+                      ...(orgQuestionFor(data.tracker.orgName) ? [orgQuestionFor(data.tracker.orgName)!] : []),
+                      ...SAMPLE_QUESTIONS,
+                    ]}
+                    text={draftText}
+                    setText={(t) => { setDraftText(t); setDirty(true); }}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-3 items-start w-full mt-2">
+                  <div className="flex flex-col gap-1 w-full">
+                    <FieldLabel>How often</FieldLabel>
+                    <p className="text-[13px] leading-[1.6] text-cloud" style={wdth}>
+                      Once runs your questions now. Weekly or monthly runs them again on that schedule so you can see what changes.
+                    </p>
+                  </div>
                   <Segmented
                     size="secondary"
                     onDark
@@ -393,21 +414,12 @@ export default function TrackerPage({ token }: { token: string }) {
                   />
                 </div>
 
-                <div className="w-full">
-                  <QuestionsField
-                    onDark
-                    text={draftText}
-                    setText={(t) => { setDraftText(t); setDirty(true); }}
-                  />
-                </div>
-
                 <div className="flex flex-col items-start gap-3">
                   <button
                     type="button"
                     onClick={save}
-                    disabled={!dirty || saving || draftText.split('\n').filter((l) => l.trim()).length === 0 ||
-                      draftText.split('\n').filter((l) => l.trim()).length > MAX_QUESTIONS}
-                    className={primaryBtn(!dirty || saving)}
+                    disabled={!canSave}
+                    className={primaryBtn(!canSave)}
                     style={wdth}
                   >
                     {saving ? 'Saving…' : 'Save changes'}

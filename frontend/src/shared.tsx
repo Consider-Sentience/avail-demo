@@ -119,7 +119,7 @@ export const labelCls = 'font-medium text-rust text-[14px] tracking-[0.28px] upp
 export const sectionTitleCls =
   'text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px] uppercase text-cloud font-normal';
 // Section body copy: design system body/large, 17 regular, 1.6 line height
-export const bodyCls = 'text-cloud text-[17px] leading-[1.6] font-normal';
+export const bodyCls = 'text-cloud text-[16px] md:text-[17px] leading-[1.6] font-normal';
 // Bordered surfaces: cloud fill + rust border, like the input panel
 export const sectionCls = 'flex flex-col gap-6 items-start px-[24px] md:px-[128px] xl:px-[256px] py-12 w-full';
 
@@ -321,13 +321,17 @@ export function SiteFooter() {
 // ---------- Cards, accordion, tables (AVAIL style: cloud + rust borders, caps labels) ----------
 
 // Stat card
-export function FindingCard({ stat, label }: { stat: string; label: string }) {
+// Finding stat line (finding cards and chart titles): 18 / 16 medium rust. See AVAIL_TYPE_SCALE.md.
+export const findingCls = 'font-medium leading-[1.3] text-rust text-[16px] md:text-[18px] tracking-[0.32px] md:tracking-[0.36px] uppercase';
+// Body text inside finding cards and the chart: 14 / 13.
+export const findingBodyCls = 'font-normal leading-[1.6] text-ink text-[13px] md:text-[14px]';
+
+export function FindingCard({ context, stat, label }: { context: string; stat: string; label: string }) {
   return (
     <div className={`${surface} flex flex-col gap-2 p-6 w-full`}>
-      <p className="font-medium leading-[1.2] text-rust text-[20px] md:text-[28px] tracking-[0.4px] md:tracking-[0.56px]" style={wdth}>
-        {stat}
-      </p>
-      <p className="font-normal leading-[1.6] text-ink text-[15px]" style={wdth}>{label}</p>
+      <p className={findingBodyCls} style={wdth}>{context}</p>
+      <p className={findingCls} style={wdth}>{stat}</p>
+      <p className={findingBodyCls} style={wdth}>{label}</p>
     </div>
   );
 }

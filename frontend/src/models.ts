@@ -5,6 +5,7 @@
 export type ModelInfo = {
   key: 'claude' | 'perplexity' | 'chatgpt' | 'gemini';
   v1Label: string; // label returned by the v1 run-demo function
+  short: string; // product name used in plain copy
   name: string; // human-readable model name
   modelId: string; // exact API model string
   provider: string; // who serves it
@@ -15,6 +16,7 @@ export const MODELS: ModelInfo[] = [
   {
     key: 'claude',
     v1Label: 'Claude',
+    short: 'Claude',
     name: 'Claude Sonnet 4.6',
     modelId: 'claude-sonnet-4-6',
     provider: 'Anthropic API',
@@ -23,6 +25,7 @@ export const MODELS: ModelInfo[] = [
   {
     key: 'perplexity',
     v1Label: 'Perplexity',
+    short: 'Perplexity',
     name: 'Perplexity Sonar',
     modelId: 'sonar',
     provider: 'Perplexity API',
@@ -31,14 +34,16 @@ export const MODELS: ModelInfo[] = [
   {
     key: 'chatgpt',
     v1Label: 'ChatGPT',
-    name: 'GPT-5.6',
-    modelId: 'gpt-5.6',
+    short: 'ChatGPT',
+    name: 'GPT-5.6 Sol',
+    modelId: 'gpt-5.6-sol',
     provider: 'OpenAI Responses API',
     how: 'Built-in web search tool; citations come from URL annotations',
   },
   {
     key: 'gemini',
     v1Label: 'Gemini',
+    short: 'Gemini',
     name: 'Gemini 3.7 Flash',
     modelId: 'gemini-3.7-flash',
     provider: 'Google Gemini API',

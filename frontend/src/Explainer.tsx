@@ -3,6 +3,9 @@ import {
   FindingCard,
   ModelsTable,
   bodyCls,
+  findingBodyCls,
+  findingCls,
+  surface,
   sectionCls,
   sectionTitleCls,
   wdth,
@@ -10,7 +13,7 @@ import {
 
 // Section order matches the credibility section's layout exactly (same padding, same full-width text),
 // so line lengths and left edges line up across the page.
-// Numbers come from the verified pilot (60 questions x 4 assistants x 2 runs = 480 responses).
+// Numbers come from our test in data/ (60 questions x 4 assistants x 2 runs = 480 answers).
 
 export function SectionTitle({
   lead,
@@ -47,6 +50,48 @@ export function ModelsSection() {
   );
 }
 
+// General questions (no organization named): 100 answers per assistant.
+// Share of answers that linked to any of the 10 organizations. Source: data/responses.csv.
+const BY_ASSISTANT = [
+  { name: 'Perplexity', cited: 48, total: 100 },
+  { name: 'Claude', cited: 18, total: 100 },
+  { name: 'Gemini', cited: 11, total: 100 },
+  { name: 'ChatGPT', cited: 2, total: 100 },
+];
+
+function AssistantBars() {
+  return (
+    <figure className={`${surface} flex flex-col gap-4 p-6 w-full`}>
+      <figcaption className="flex flex-col gap-1">
+        <span className={findingCls} style={wdth}>It depends on the assistant</span>
+        <span className={findingBodyCls} style={wdth}>
+          When a question didn’t name an organization, the share of each assistant’s answers that linked to any of the 10 organizations
+        </span>
+      </figcaption>
+      <ul className="flex flex-col gap-3 w-full">
+        {BY_ASSISTANT.map((a) => {
+          const pct = Math.round((a.cited / a.total) * 100);
+          return (
+            <li
+              key={a.name}
+              className="grid grid-cols-[88px_1fr_auto] md:grid-cols-[120px_1fr_56px] items-center gap-3"
+              title={`${a.name}: ${a.cited} of ${a.total} answers (${pct}%)`}
+            >
+              <span className={findingBodyCls} style={wdth}>{a.name}</span>
+              <span className="h-3 w-full rounded-[4px] bg-slate/10 overflow-hidden" aria-hidden="true">
+                <span className="block h-full rounded-[4px] bg-rust" style={{ width: `${Math.max(pct, 1)}%` }} />
+              </span>
+              <span className={`${findingBodyCls} text-right whitespace-nowrap`} style={wdth}>
+                <span className="font-medium">{pct}%</span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </figure>
+  );
+}
+
 export function WhySection() {
   return (
     <section className={sectionCls}>
@@ -56,21 +101,34 @@ export function WhySection() {
           More people now ask an AI assistant before they open a search engine.
           When an assistant answers a question about animals, the sources it
           cites decide whose expertise the reader sees, and whose gets skipped.
-          Most organizations have never checked where they stand. We tested 480
-          AI answers to real questions about animals. Here is what we found:
+          Most organizations have never checked where they stand. We asked Claude, ChatGPT, Gemini, and Perplexity 60
+          questions about animals, twice each, and checked whether the 480 answers linked to the websites of 10 animal
+          advocacy organizations. Here is what we found:
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         <FindingCard
-          stat="At least 6 in 10"
-          label="answers linked to an organization’s own website when the question named that organization"
+          context="When a question named the organization"
+          stat="80% of answers"
+          label="linked to that organization’s own website"
         />
         <FindingCard
-          stat="Fewer than 1 in 10"
-          label="answers linked to it when the question was a general one about its topic and did not name any organization"
+          context="When a question didn’t name an organization"
+          stat="20% of answers"
+          label="linked to any of the 10 organizations"
         />
       </div>
+      <AssistantBars />
+      <a
+        href="https://github.com/Consider-Sentience/avail-demo/tree/main/data"
+        target="_blank"
+        rel="noreferrer"
+        className="-mt-2 mb-4 text-cloud text-[14px] underline hover:text-rust"
+        style={wdth}
+      >
+        See the questions and results
+      </a>
 
       <div className="flex flex-col gap-4 w-full">
         <AccordionRow title="What is answer engine optimization (AEO)?">
